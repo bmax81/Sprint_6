@@ -7,18 +7,22 @@ public class Feline extends Animal implements Predator {
     public List<String> eatMeat() throws Exception {
         return getFood("Хищник");
     }
-
-    @Override
-    public int getKittens() {  // Реализуем новый метод интерфейса
-        return getKittens(1);
-    }
-
-    public int getKittens(int kittensCount) {
-        return kittensCount;
-    }
-
     @Override
     public String getFamily() {
         return "Кошачьи";
     }
+
+    @Override
+    public List<String> getFood(String animalKind) throws Exception {
+        return super.getFood(animalKind);
+    }
+
+    public int getKittens() {
+        return getKittens(1);
+    }
+    public int getKittens(int kittensCount) {
+        return kittensCount;
+    }
+
+
 }

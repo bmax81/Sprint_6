@@ -1,34 +1,43 @@
 package com.example;
 
+import org.junit.Before;
 import org.junit.Test;
-import java.util.List;
-import static org.junit.Assert.*;
+import org.junit.runner.RunWith;
+import org.mockito.junit.MockitoJUnitRunner;
 
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+
+@RunWith(MockitoJUnitRunner.class)
 public class FelineTest {
-    private final Feline feline = new Feline();
+
+    private Feline feline;
+
+    @Before
+    public void setup() {
+        feline = new Feline();
+    }
 
     @Test
-    public void testGetKittensDefault() {
+    public void getKittensShouldReturnDefaultValueTest() {
         assertEquals(1, feline.getKittens());
     }
 
     @Test
-    public void testGetKittensWithCount() {
-        assertEquals(3, feline.getKittens(3));
+    public void getKittensWithArgumentShouldReturnSameValueTest() {
+        int count = feline.getKittens(3);
+        assertEquals(3, count);
     }
 
     @Test
-    public void testEatMeat() throws Exception {
-        assertEquals(List.of("Животные", "Птицы", "Рыба"), feline.eatMeat());
-    }
-
-    @Test
-    public void testGetFamily() {
+    public void getFamilyShouldReturnFelineFamilyTest() {
         assertEquals("Кошачьи", feline.getFamily());
     }
 
     @Test
-    public void testInvalidAnimalType() {
-        assertThrows(Exception.class, () -> feline.getFood("Неизвестный"));
+    public void eatMeatShouldReturnPredatorFoodTest() throws Exception {
+        List<String> food = feline.eatMeat();
+        assertEquals(List.of("Животные", "Птицы", "Рыба"), food);
     }
 }

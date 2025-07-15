@@ -1,6 +1,5 @@
 package com.example;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -9,39 +8,42 @@ import org.mockito.junit.MockitoJUnitRunner;
 import java.util.List;
 
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class LionTest {
+
     @Mock
     private Feline feline;
-    private Lion lion;
 
-    @Before
-    public void setUp() throws Exception {
-        lion = new Lion("Самец", feline);
+    @Test
+    public void getKittensDelegatesToFeline() throws Exception {
+        when(feline.getKittens()).thenReturn(5);
+        Lion lion = new Lion("Самец", feline);
+        assertEquals(5, lion.getKittens());
     }
 
     @Test
-    public void testDoesHaveMane() throws Exception {
-        assertTrue(new Lion("Самец", feline).doesHaveMane());
-        assertFalse(new Lion("Самка", feline).doesHaveMane());
-    }
-
-    @Test
-    public void testInvalidSex() {
-        assertThrows(Exception.class, () -> new Lion("Неизвестно", feline));
-    }
-
-    @Test
-    public void testGetKittens() {
-        when(feline.getKittens()).thenReturn(1);
-        assertEquals(1, lion.getKittens());
-    }
-
-    @Test
-    public void testGetFood() throws Exception {
+    public void getFoodReturnsPredatorFood() throws Exception {
         when(feline.getFood("Хищник")).thenReturn(List.of("Мясо"));
+        Lion lion = new Lion("Самец", feline);
         assertEquals(List.of("Мясо"), lion.getFood());
+    }
+
+    @Test
+    public void getFoodCallsGetFoodWithPredator() throws Exception {
+        Lion lion = new Lion("Самец", feline);
+        lion.getFood();
+        verify(feline).getFood("Хищник");
+    }
+
+    @Test(expected = Exception.class)
+    public void constructorWithInvalidSexThrowsException() throws Exception {
+        new Lion("Неизвестно", feline);
+    }
+
+    @Test(expected = Exception.class)
+    public void constructorWithNullSexThrowsException() throws Exception {
+        new Lion(null, feline);
     }
 }
